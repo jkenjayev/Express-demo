@@ -26,7 +26,7 @@ app.get("/api/articles", (req, res) => {
   res.send(req.query);
 });
 
-app.post("/", (req, res) => {
+app.post("/api/books", (req, res) => {
   const book = { id: books.length + 1, title: req.body.title };
   books.push(book);
 
