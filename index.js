@@ -3,7 +3,6 @@ const Joi = require("joi");
 const app = express();
 app.use(express.json());
 
-
 const books = [
   { id: 1, title: "Clean Code" },
   { id: 2, title: "Code Complete" },
@@ -30,17 +29,27 @@ app.get("/api/articles", (req, res) => {
 
 app.post("/api/books", (req, res) => {
   const { error } = validateBook(req.body);
-  if(error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send(error.details[0].message);
   const book = { id: books.length + 1, title: req.body.title };
   books.push(book);
 
   res.status(201).send(book);
 });
 
+app.put("/:id", (req, res) => {
+  const { error } = validateBook(req.body);
+  if (error) return res.status(400).send(error.details[0].message);
+  const book = books.find((b) => b.id === parseInt(req.params.id));
+  if (!book) return res.status(404).send("Not found such book");
+  book = req.body.title;
+
+  res.status(201).send(book);
+});
+
 function validateBook(book) {
   const schema = {
-    title: Joi.string().required().min(3)
-  }
+    title: Joi.string().required().min(3),
+  };
 
   return Joi.validate(book, schema);
 }
