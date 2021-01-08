@@ -11,26 +11,16 @@ const books = [
   { id: 5, title: "Python crash course" },
 ];
 
-app.get("/", (req, res) => {
-  res.send("hello");
-});
-
-app.post("/", (req, res) => {
-  res.send(["Clean Code", "Soft skills", "Python Crash course"]);
-});
-
 app.get('/api/books', (req, res) => {
   res.send(books);
+});
+
+app.get('/api/books/:id', (req, res) => {
+  const book = books.find((b) => b.id === parseInt(req.params.id));
+  if (!book) return res.status(404).send("Not found such book");
+  
+  res.send(book);
 })
-
-app.get("/:id", (req, res) => {
-  res.send(req.params.id);
-});
-
-app.get("/api/articles", (req, res) => {
-  res.send(req.query);
-});
-
 app.post("/api/books", (req, res) => {
   const { error } = validateBook(req.body);
   if (error) return res.status(400).send(error.details[0].message);
