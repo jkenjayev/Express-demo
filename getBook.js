@@ -12,5 +12,5 @@ const books = [
 app.get("/:id", (req, res) => {
     const book = books.find((b) => b.id === parseInt(req.params.id));
     if(!book) return res.status(404).send('not exits such book');
-    res.send(book);
+    res.send(book); 
 })
