@@ -1,6 +1,8 @@
 const express = require("express");
+const Joi = require("joi");
 const app = express();
 app.use(express.json());
+
 
 const books = [
   { id: 1, title: "Clean Code" },
@@ -27,13 +29,21 @@ app.get("/api/articles", (req, res) => {
 });
 
 app.post("/api/books", (req, res) => {
-  if(!req.body.name) return res.status(400).send('Name is required');
-  if(req.body.name.length < 3) return res.status(400).send('Name should be at least 3 characters');
+  const { error } = validateBook(req.body);
+  if(error) return res.status(400).send(error.details[0].message);
   const book = { id: books.length + 1, title: req.body.title };
   books.push(book);
 
   res.status(201).send(book);
 });
+
+function validateBook(book) {
+  const schema = {
+    title: Joi.string().required().min(3)
+  }
+
+  return Joi.validate(book, schema);
+}
 app.listen(5000, () => {
   console.log("Hey! I am listening the 5000th port");
 });
