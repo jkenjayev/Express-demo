@@ -19,6 +19,10 @@ app.post("/", (req, res) => {
   res.send(["Clean Code", "Soft skills", "Python Crash course"]);
 });
 
+app.get('/api/books', (req, res) => {
+  res.send(books);
+})
+
 app.get("/:id", (req, res) => {
   res.send(req.params.id);
 });
@@ -36,15 +40,24 @@ app.post("/api/books", (req, res) => {
   res.status(201).send(book);
 });
 
-app.put("/:id", (req, res) => {
+app.put("/api/books/:id", (req, res) => {
   const { error } = validateBook(req.body);
   if (error) return res.status(400).send(error.details[0].message);
   const book = books.find((b) => b.id === parseInt(req.params.id));
   if (!book) return res.status(404).send("Not found such book");
-  book = req.body.title;
+  book.title = req.body.title;
 
   res.status(201).send(book);
 });
+
+app.delete('/api/books/:id', (req, res) => {
+  const book = books.find((b) => b.id === parseInt(req.params.id));
+  if (!book) return res.status(404).send("Not found such book");
+  const bookIndex = books.indexOf(book);
+  books.splice(bookIndex, 1);
+
+  res.send(book);
+})
 
 function validateBook(book) {
   const schema = {
