@@ -27,6 +27,8 @@ app.get("/api/articles", (req, res) => {
 });
 
 app.post("/api/books", (req, res) => {
+  if(!req.body.name) return res.status(400).send('Name is required');
+  if(req.body.name.length < 3) return res.status(400).send('Name should be at least 3 characters');
   const book = { id: books.length + 1, title: req.body.title };
   books.push(book);
 
