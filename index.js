@@ -10,8 +10,12 @@ app.post("/", (req, res) => {
 });
 
 app.get("/:id", (req, res) => {
-  
+  res.send(req.params.id);
 });
+
+app.get('/api/articles', (req, res) => {
+    res.send(req.params);
+})
 app.listen(5000, () => {
   console.log("Hey! I am listening the 5000th port");
 });
