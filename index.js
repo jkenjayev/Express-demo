@@ -6,7 +6,10 @@ const app = express();
 app.use(express.json());
 app.use(helmet());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('tiny'))
+if(app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  console.log("Logger ishlaypti...");
+}
 
 console.log(process.env.NODE_ENV);
 console.log(app.get('env'));
